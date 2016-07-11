@@ -2,6 +2,8 @@
 // when user clicks anywhere on the button, the "printQuote" function is called
 document.getElementById('loadQuote').addEventListener("click", printQuote, false);
 
+var foo = prompt("type something here!");
+alert(foo);
 //DONE	//create a java script array of objects to hold quotes
 		//
 		//each object should have:
@@ -40,7 +42,7 @@ var quotes =  [
 // selects a random quote object
 //returns random quote
 function getRandomQuote() {
-//var randQ = Math.random(Math.floor())
+//var randQ = Math.floor(Math.random()*6) + 1;
 }
 // create function printQuote
 function printQuote(){
