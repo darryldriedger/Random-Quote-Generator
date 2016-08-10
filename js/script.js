@@ -10,7 +10,7 @@ var tracker = [];
 div = document.getElementById('loadQuote').addEventListener("click", printQuote, false);
 
 	//The set interval is used to refresh the quote every 30 seconds
-intervalID = window.setInterval(printQuote, 1500);//30000
+intervalID = window.setInterval(printQuote, 30000);//1500
 
 //create a java script array of objects to hold quotes
 	//each object should have:
@@ -92,7 +92,7 @@ quotesList =  [
 	];
 
 tempList = quotesList.slice(0);
-for (x in tempList){
+for (var x in tempList){
     console.log(tempList[x].quote);
 }
 
@@ -112,12 +112,10 @@ function getRandomQuote() {
 
 	tracker.push(tempList[i].quote);
 	console.log(tracker.length);
-/*    for (x in tempList){
-    console.log(tempList[x]);
-}*/
-for (x in tracker){
-    console.log(tracker[x]);
-}
+
+	for (x in tracker){
+	    console.log(tracker[x]);
+	}
 
 /*printQuote doesn't add a 
 <span class="citation"> for a missing citation or a 
@@ -149,22 +147,30 @@ return message;
 	
 }
 
+//This function produces random background color with an offset font color to match
 function randomColor() {
-    var r; var g; var b; var Color;
-    r = Math.floor(Math.random()* 256);
-    g = Math.floor(Math.random()* 256);
-    b = Math.floor(Math.random()* 256);
+    var r; var g; var b; var x; var Color;
+
+    r = Math.floor(Math.random()* 156);
+    g = Math.floor(Math.random()* 156);
+    b = Math.floor(Math.random()* 156);
     Color = "rgb(" + r + "," + g +"," + b + ")";
     document.getElementById("randomBackground").style.background = Color;
+    r += 100;
+    g += 100;  
+    b += 100;  
+    x = 0.8;//optional random transparency --> Math.floor(Math.random()* 9) / 10;
+    Color = "rgba(" + r + "," + g +"," + b +"," + x + ")";
+    console.log(x);
+   	console.log(Color); 
+    document.getElementById("quote-box").style.color = Color;
 }
 
-//printQuote displays the final HTML string to the page
+//printQuote displays the final HTML string to the page:
 function printQuote(){
-	console.log(quotesList.length);
 	//printQuote calls the getRandomQuote function and stores the returned quote object in a variable
-	var currentQuote = getRandomQuote(quotesList);
-	//console.log(currentQuote);
-	//printQuote constructs a string using the different properties of the quote object using the following HTML template: */
+	var currentQuote = getRandomQuote();
+	//printQuote constructs a string using the different properties of the quote */
 	document.getElementById('quote-box').innerHTML = currentQuote;
 	randomColor();
 }
