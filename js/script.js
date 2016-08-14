@@ -2,23 +2,20 @@
 var div = "";
 var intervalID = "";
 var quotesList = "";
-var tempList = "";
-var tracker = [];
-
+var tempList = [];
 // event listener to respond to "Show another quote" button clicks
 // when user clicks anywhere on the button, the "printQuote" function is called
 div = document.getElementById('loadQuote').addEventListener("click", printQuote, false);
-
-	//The set interval is used to refresh the quote every 30 seconds
-intervalID = window.setInterval(printQuote, 30000);//1500
+//The set interval is used to refresh the quote every 30 seconds
+intervalID = window.setInterval(printQuote, 30000);//
 
 //create a java script array of objects to hold quotes
 	//each object should have:
 	// quote property containing a string 
 	// source property - string
-	// citation- string
-	// year - number
-	//etc..
+	// citation- string : (made-up)
+	// year - number : (made-up)
+	//etc.. "tag" : (made-up)
 quotesList =  [
 
 	{/*0*/quote: "When hungry, eat your rice; when tired, close your eyes. Fools may laugh at me, but wise men will know what I mean" ,
@@ -91,87 +88,86 @@ quotesList =  [
 	 tag: "Existence"}
 	];
 
-tempList = quotesList.slice(0);
-for (var x in tempList){
-    console.log(tempList[x].quote);
-}
-
-// create function named - getRandomQuote:
-	// selects a random quote object
-	//returns random quotes	
-function getRandomQuote() {
-
-	if(tempList.length === 0){
-		tempList = quotesList.slice(0);
-		tracker = [];
-	}
-	 
-	var i = Math.floor(Math.random()* tempList.length);
-	console.log("number" + i);
-	console.log("tempList" + tempList.length);
-
-	tracker.push(tempList[i].quote);
-	console.log(tracker.length);
-
-	for (x in tracker){
-	    console.log(tracker[x]);
-	}
-
-/*printQuote doesn't add a 
-<span class="citation"> for a missing citation or a 
-<span class="year"> if the year property is missing.
-I included an if else to check for missing elements and only add the ones that exist.*/
-	var message = '';
-		message += '<p class="quote">' + tempList[i].quote + '</p>';
-		message +=  '<p class="source">' + tempList[i].qsource;
-		if (tempList[i].citation !== undefined) {
-    		message +=  '<span class="citation">' + tempList[i].citation + '</span>';
-		} else {
-    		message += "";
-		}
-		if (tempList[i].year !== undefined) {
-    		message +=  '<span class="year">' + tempList[i].year + '</span>';
-		} else {
-    		message += "";
-		}
-		if (tempList[i].tag !== undefined) {
-    		message +=  '<p class="tag">' + tempList[i].tag + '</p>';
-		} else {
-    		message += "";
-		}
-		message +=  '</p>';
-
-//the splice was used to drop the current qoute from the list until the temporary qoutes list is empty, in which case the temporary list will be reset.
-tempList.splice(i, 1);
-return message;
-	
-}
-
 //This function produces random background color with an offset font color to match
 function randomColor() {
-    var r; var g; var b; var x; var Color;
-
+	var r; var g; var b; var x; var Color;
+	//the random color range is from 0 to 156
     r = Math.floor(Math.random()* 156);
     g = Math.floor(Math.random()* 156);
-    b = Math.floor(Math.random()* 156);
+    b = Math.floor(Math.random()* 156); 
     Color = "rgb(" + r + "," + g +"," + b + ")";
+    //sets the random background color
     document.getElementById("randomBackground").style.background = Color;
+    //the random color range is from 100 to 256
     r += 100;
     g += 100;  
     b += 100;  
     x = 0.8;//optional random transparency --> Math.floor(Math.random()* 9) / 10;
     Color = "rgba(" + r + "," + g +"," + b +"," + x + ")";
-    console.log(x);
-   	console.log(Color); 
+    //sets the random font color
     document.getElementById("quote-box").style.color = Color;
+}
+
+//This variable basically makes a copy of the quotesList to manipulate without affecting the original list
+tempList = quotesList.slice(0);
+
+// create function named - getRandomQuote:
+	// selects a random quote object
+	// returns random quote	array/object
+function getRandomQuote() {
+	var i;
+	var randQuoteArr = [];
+	//this checks if the templist has dropped its entire list of quotes and resets it to include a complete list to pull from
+	if(tempList.length === 0){
+		tempList = quotesList.slice(0);
+	}
+	//generates  a number to choose a random quote from the available list and console logs the random number and the current length of the list (for reference) 
+	i = Math.floor(Math.random()* tempList.length);
+	console.log("number" + i);
+	console.log("tempList" + tempList.length);
+	//pushes the current qoute to the randQuoteArr variable to be returned and used in printQuote
+	randQuoteArr.push(tempList[i]);
+
+	//the splice was used to drop the current qoute from the list until the temporary qoutes list is empty, in which case the temporary list will be reset.
+	tempList.splice(i, 1);
+	return randQuoteArr;
+	
 }
 
 //printQuote displays the final HTML string to the page:
 function printQuote(){
+	var currentQuote = '';
+	var message = '';
 	//printQuote calls the getRandomQuote function and stores the returned quote object in a variable
-	var currentQuote = getRandomQuote();
-	//printQuote constructs a string using the different properties of the quote */
-	document.getElementById('quote-box').innerHTML = currentQuote;
+	currentQuote = getRandomQuote();
+	//printQuote constructs a string using the different properties of the quote
+	/*printQuote doesn't add a 
+	<span class="citation"> for a missing citation or a 
+	<span class="year"> if the year property is missing.
+	I included an if else to check for missing elements and only add the ones that exist.*/
+
+	message = '';
+	message += '<p class="quote">' + currentQuote[0].quote + '</p>';
+	message +=  '<p class="source">' + currentQuote[0].qsource;
+	if (currentQuote[0].citation !== undefined) {
+		message +=  '<span class="citation">' + currentQuote[0].citation + '</span>';
+	} else {
+		message += "";
+	}
+	if (currentQuote[0].year !== undefined) {
+		message +=  '<span class="year">' + currentQuote[0].year + '</span>';
+	} else {
+		message += "";
+	}
+	if (currentQuote[0].tag !== undefined) {
+		message +=  '<p class="tag">' + currentQuote[0].tag + '</p>';
+	} else {
+		message += "";
+	}
+	message +=  '</p>';
+	//sets the current random quote to the quote-box ID
+	document.getElementById('quote-box').innerHTML = message;
+	//calls the random color function to include the random background color and font color generated in the function
 	randomColor();
 }
 
